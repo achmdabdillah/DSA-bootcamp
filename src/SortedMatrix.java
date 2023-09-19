@@ -3,79 +3,44 @@ import java.util.Arrays;
 public class SortedMatrix {
     public static void main(String[] args) {
         int[][] arr = {
-                {1, 2, 3},
-                {4, 5, 6},
-                {7, 8, 9}
+                {1}
         };
-        System.out.println(Arrays.toString(search(arr, 4)));
+        System.out.println(Arrays.toString(searchMatrix(arr, 1)));
     }
 
-    // search in the row provided between the cols provided
-    // binary search function
-    static int[] binarySearch (int[][] matrix, int row, int cStart, int cEnd, int target) {
-        while(cStart <= cEnd) {
-            int mid = cStart + (cEnd - cStart) / 2;
-            if(matrix[row][mid] == target) {
-                return new int[] {row, mid};
-            }
-            if(matrix[row][mid] > target) {
-                cEnd = mid;
-            }
-            if(matrix[row][mid] < target) {
-                cStart = mid;
-            }
-        }
-        return new int[] {-1, -1};
-    }
-
-    // search function
-    static int[] search(int[][] matrix, int target) {
-        // check if matrix may be empty
-        int rows = matrix.length;
-        int cols = matrix[0].length;
-
-        if(rows == 1) {
-            return binarySearch(matrix, 1, 0, cols - 1, target);
-        }
-
+    public static int[] searchMatrix(int[][] matrix, int target) {
+        // Base condition...
+        // If it's a null matrix, return false....
+        if(matrix==null || matrix.length==0 || matrix[0].length==0) 
+            return new int[] {-1, -1};
+        int row = matrix.length;        // Number of Rows of the matrix...
+        int col = matrix[0].length;     // Number of Columns of the matrix...
+        // Initialize rStart index of the considered 1D matrix (i.e: 0)...
         int rStart = 0;
-        int rEnd = rows - 1;
-        int cMid = cols / 2;
-        // run the loop till 2 rows are remaining
-        while(rStart < rEnd -1){
-            if(matrix[rStart][cMid] == target) {
-                return new int[] {rStart, cMid};
-            }
-            if(matrix[rStart][cMid] > target) {
-                rEnd = cMid;
-            } else {
-                rStart = cMid;
-            }
-        }
+        // Set rEnd index of the considered 1D matrix (i.e:(row*col)-1)...
+        int rEnd = row * col - 1;
+        // Now apply binary search & Run a while loop...
+        while(rStart <= rEnd ){
+            // Get the middle index as (rStart + rEnd) / 2...
+            int mid = rStart + (rEnd - rStart)/2;
+            // Set the element at middle index using matrix[mid / col][mid % col]...
 
-        // now we have two rows
-        // check whether the target is in the col of 2 rows
-        if(matrix[rStart][cMid] == target) {
-            return new int[] {rStart, cMid};
-        }
-        if(matrix[rStart + 1][cMid] == target) {
-            return new int[] {rStart + 1, cMid};
-        }
 
-        // search in 1st half
-        if(matrix[rStart][cMid - 1] >= target){
-            return binarySearch(matrix, rStart, 0, cMid-1, target);
+            int midElement = matrix[mid / col][mid % col];
+            // If the element present at the middle index is equal to the target integer, return true...
+            if(midElement == target){
+                // System.out.print(mid / col + " , " + (int) mid % col +"      ");
+                return new int[] {mid/col, mid % col};   
+            }
+            // If the middle index is greater than the target, update the rEnd index to mid - 1...
+            if(midElement > target){
+                rEnd = mid-1;
+            }
+            // If the middle index element is lesser than the target, update the low index to middle+1...
+            else{
+                rStart = mid + 1;
+            }
         }
-        // search in 2nd half
-        if(matrix[rStart][cMid + 1] <= target && matrix[rStart][cols - 1 ] >= target){
-            return binarySearch(matrix, rStart, cMid + 1, cols - 1, target);
-        }
-        // search in 3rd half
-        if(matrix[rStart + 1][cMid - 1] >= target){
-            return binarySearch(matrix, rStart + 1, 0, cMid-1, target);
-        } else {
-            return binarySearch(matrix, rStart + 1, cMid + 1, cols - 1, target);
-        }
+        return new int[] {-1, -1};       // As we didn't get the target, we can directly return false...
     }
-
 }
