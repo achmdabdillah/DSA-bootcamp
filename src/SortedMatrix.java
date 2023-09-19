@@ -5,7 +5,7 @@ public class SortedMatrix {
         int[][] arr = {
                 {1}
         };
-        System.out.println(Arrays.toString(searchMatrix(arr, 1)));
+        System.out.println(Arrays.toString(searchMatrix(arr, 13)));
     }
 
     public static int[] searchMatrix(int[][] matrix, int target) {
