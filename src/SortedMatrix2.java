@@ -15,15 +15,15 @@ public class SortedMatrix2 {
     }
 
     public static int[] searchMatrix(int[][] matrix, int target) {
-        // start from bottom left
-        int row = matrix.length - 1;
-        int col = 0;
-        while (row >= 0 && col < matrix[0].length) {
+        // start from top right
+        int row = 0;
+        int col = matrix[0].length - 1;
+        while (col >= 0 && row < matrix[0].length) {
             if (matrix[row][col] > target) {
-                row--;
+                col--;
             }
             else if (matrix[row][col] < target) {
-                col++;
+                row++;
             }
             else {
                 return new int[] {row, col};
